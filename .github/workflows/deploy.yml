@@ -22,7 +22,6 @@ jobs:
 
   deploy-eventbridge:
     runs-on: ubuntu-latest
-    needs: deploy-lambdas
     env:
       REGION: ${{ secrets.AWS_REGION }}
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
