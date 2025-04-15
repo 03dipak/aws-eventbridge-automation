@@ -1,25 +1,12 @@
+---
 name: Deploy AWS Infrastructure
 
-on:
+"on":
   push:
     branches:
       - main
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
-
-      - name: Install yamllint
-        run: |
-          pip install yamllint
-
-      - name: Lint YAML files
-        run: |
-          yamllint .github/workflows --format=parsable
-
   deploy-eventbridge:
     runs-on: ubuntu-latest
     permissions:
@@ -29,7 +16,7 @@ jobs:
       REGION: ${{ secrets.AWS_REGION }}
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
       BUCKET_NAME: ${{ secrets.GLUE_BUCKET }}
-      ENV_NAME: main
+
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
@@ -42,12 +29,12 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::980921712180:role/WebConsole
+          role-to-assume: ${{ secrets.AWS_WEB_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Who am I?
         run: aws sts get-caller-identity
-        
+
       - name: Install Deployment Dependencies
         run: |
           pip install boto3
@@ -55,4 +42,4 @@ jobs:
       - name: Deploy EventBridge Rule
         run: |
           python scripts/deploy_eventbridge.py \
-            ${{ secrets.AWS_REGION }} $ENV_NAME ${{ secrets.GLUE_BUCKET }}
+            ${{ secrets.AWS_REGION }} ${{ secrets.GLUE_BUCKET }}

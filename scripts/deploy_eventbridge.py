@@ -7,12 +7,11 @@ from botocore.exceptions import ClientError
 
 # --- Read CLI Args ---
 if len(sys.argv) != 4:
-    print("Usage: python deploy_eventbridge.py <region> <env_name> <bucket_name>")
+    print("Usage: python deploy_eventbridge.py <region> <bucket_name>")
     sys.exit(1)
 
 REGION = sys.argv[1]
-ENV_NAME = sys.argv[2]
-BUCKET_NAME = sys.argv[3]  # Added Bucket Name argument
+BUCKET_NAME = sys.argv[2]  # Added Bucket Name argument
 EVENT_BUS_NAME = "default"
 
 # --- Paths ---
@@ -49,7 +48,7 @@ def deploy_eventbridge_rule(rule_file):
         Name=rule_name,
         EventPattern=json.dumps(event_pattern),
         State="ENABLED",
-        Description=f"Deployed by GitHub Actions for ENV: {ENV_NAME}",
+        Description=f"Deployed by GitHub Actions",
         EventBusName=EVENT_BUS_NAME,
     )
 
@@ -96,7 +95,7 @@ def attach_targets(rule_name, rule_arn, target_file):
 
 
 def deploy_all_eventbridge_rules():
-    print(f"🚀 Deploying EventBridge rules in REGION: {REGION} | ENV: {ENV_NAME}")
+    print(f"🚀 Deploying EventBridge rules in REGION: {REGION}")
 
     for rule_file in RULES_DIR.glob("*.json"):
         rule_name = rule_file.stem
