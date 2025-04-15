@@ -6,7 +6,7 @@ from pathlib import Path
 from botocore.exceptions import ClientError
 
 # --- Read CLI Args ---
-if len(sys.argv) != 4:
+if len(sys.argv) != 3:
     print("Usage: python deploy_eventbridge.py <region> <bucket_name>")
     sys.exit(1)
 
