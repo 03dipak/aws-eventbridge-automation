@@ -1,0 +1,6 @@
+[
+  {
+    "Id": "demo-lambda-getfile-dev",
+    "function": "demo-lambda-getfile-dev"
+  }
+]
